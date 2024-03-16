@@ -6,6 +6,7 @@ function Square({value, onSquareClick}) {
   return <button className="square" onClick={onSquareClick}>{value}</button>;
 }
 
+// If any of these props change, the Board will re-render
 function Board({xIsNext, squares, onPlay}) {
   function handleClick(i) {
     if (squares[i] != null || calculateWinner(squares)) {
@@ -30,6 +31,10 @@ function Board({xIsNext, squares, onPlay}) {
     status = "Next player: " + (xIsNext ? "🎀" : "🍞");
   }
 
+  // In the Board component, each Square component is rendered with the onSquareClick prop
+  // The prop gets called when a square is clicked
+  // 1. handleClick
+  // 2. Then go to Square to add the bow or bread to the square button
   return (
   <>
     <div className="status">{status}</div>
@@ -52,11 +57,14 @@ function Board({xIsNext, squares, onPlay}) {
   );
 }
 
+// Everytime you reload the page, the entire React application is re-initialized
+// App gets rendered. As part of rendering App, the Board component is rendered too since its
+// returned by the App.
 export default function App() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
+  const currentSquares = history[currentMove]; // History[0] = {null, null,}
 
   function handlePlay(nextSquares) {
     const nextHistory = ([...history.slice(0, currentMove+1), nextSquares]);
